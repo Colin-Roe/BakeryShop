@@ -19,12 +19,9 @@ namespace ColinsBakeryShop.Controllers
 
         public IActionResult Index()
         {
-            var pies = _pieRepository.GetAllPies().OrderBy(p => p.Name);
-
-            var homeViewModel = new HomeViewModel()
+            var homeViewModel = new HomeViewModel
             {
-                Title = "Welcome to Colin's Bakery Shop",
-                Pies = pies.ToList()
+                PiesOfTheWeek = _pieRepository.PiesOfTheWeek
             };
 
             return View(homeViewModel);

@@ -30,7 +30,7 @@ namespace ColinsBakeryShop
             services.AddTransient<IPieRepository, PieRepository>();
             services.AddTransient<IFeedbackRepository, FeedbackRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<ShoppingCart>(sp => ShoppingCart.GetCart(sp));
+            services.AddScoped(sp => ShoppingCart.GetCart(sp));
             services.AddMvc();
 
             services.AddMemoryCache();
@@ -45,14 +45,7 @@ namespace ColinsBakeryShop
             app.UseStaticFiles();
             app.UseSession();
             app.UseAuthentication();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}"
-                    );
-            });
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

@@ -2,15 +2,57 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ColinsBakeryShop.Models;
+using ColinsBakeryShop.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ColinsBakeryShop.Controllers
 {
     public class ShoppingCartController : Controller
     {
-        public IActionResult Index()
+        private readonly IPieRepository _pieRepository;
+        private readonly ShoppingCart _shoppingCart;
+
+        public ShoppingCartController(IPieRepository pieRepository, ShoppingCart shoppingCart)
         {
-            return View();
+            _pieRepository = pieRepository;
+            _shoppingCart = shoppingCart;
+        }
+
+        public ViewResult Index()
+        {
+            var items = _shoppingCart.GetShoppingCartItems();
+            _shoppingCart.ShoppingCartItems = items;
+
+            var shoppingCartViewModel = new ShoppingCartViewModel
+            {
+                ShoppingCart = _shoppingCart,
+                ShoppingCartTotal = _shoppingCart.GetShoppingCartTotal()
+            };
+
+            return View(shoppingCartViewModel);
+        }
+
+        public RedirectToActionResult AddToShoppingCart(int pieId)
+        {
+            var selectedPie = _pieRepository.GetPieById(pieId);
+
+            if (selectedPie != null)
+            {
+                _shoppingCart.AddToCart(selectedPie, 1);
+            }
+            return RedirectToAction("Index");
+        }
+
+        public RedirectToActionResult RemoveFromShoppingCart(int pieId)
+        {
+            var selectedPie = _pieRepository.GetPieById(pieId);
+
+            if (selectedPie != null)
+            {
+                _shoppingCart.RemoveFromCart(selectedPie);
+            }
+            return RedirectToAction("Index");
         }
     }
 }

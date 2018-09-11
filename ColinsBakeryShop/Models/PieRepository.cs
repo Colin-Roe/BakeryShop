@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +23,14 @@ namespace ColinsBakeryShop.Models
         public Pie GetPieById(int pieId)
         {
             return _appDbContext.Pies.FirstOrDefault(p => p.Id == pieId);
+        }
+
+        public IEnumerable<Pie> PiesOfTheWeek
+        {
+            get
+            {
+                return _appDbContext.Pies.Include(c => c.Category).Where(p => p.IsPieOfTheWeek);
+            }
         }
     }
 }

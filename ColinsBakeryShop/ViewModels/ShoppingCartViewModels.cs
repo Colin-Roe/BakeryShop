@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace ColinsBakeryShop.ViewModels
 {
-    public class HomeViewModel
+    public class ShoppingCartViewModel
     {
-        public IEnumerable<Pie> PiesOfTheWeek { get; set; }
+        public ShoppingCart ShoppingCart { get; set; }
+        public decimal ShoppingCartTotal { get; set; }
     }
 }
